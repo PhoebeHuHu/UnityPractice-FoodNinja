@@ -44,6 +44,16 @@ public class Target : MonoBehaviour
             gameManager.ScoreUpdate(scoreValue);
             //play partical when target is destroyed
             Instantiate(destroyParticle, transform.position, destroyParticle.transform.rotation);
+            //play the audio effect
+            if (gameObject.CompareTag("Bad"))
+            {
+                gameManager.gameSound.PlayOneShot(gameManager.badSound,0.5f);
+            }
+            else
+            {
+                gameManager.gameSound.PlayOneShot(gameManager.scoreSound);
+            }
+            
         }
     }
     private void OnTriggerEnter(Collider other)

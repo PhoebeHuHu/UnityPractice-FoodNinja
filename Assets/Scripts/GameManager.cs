@@ -16,11 +16,18 @@ public class GameManager : MonoBehaviour
     public GameObject titleScreen;
     private int score;
     public bool isGameActive;
+    public AudioClip buttonSound;
+    public AudioClip scoreSound;
+    public AudioClip gameOverSound;
+    public AudioClip badSound;
+    private AudioSource bgm;
+    public AudioSource gameSound;
     // Start is called before the first frame update
     void Start()
     {
-        
-        
+        AudioSource[] audioSources = GetComponentsInChildren<AudioSource>();
+        bgm = audioSources[0];
+        gameSound = audioSources[1];
     }
 
     // Update is called once per frame
@@ -48,20 +55,46 @@ public class GameManager : MonoBehaviour
     {
         gameOverText.gameObject.SetActive(true);
         restartButton.gameObject.SetActive(true);
+        bgm.Stop();
+        gameSound.PlayOneShot(gameOverSound,0.6f);
         isGameActive = false;
     }
     public void RestartGame()
+    { 
+        isGameActive = true;
+        StartCoroutine(RestartGameAfterDelay());
+
+    }
+    private IEnumerator RestartGameAfterDelay()
     {
+        // 等待音效播放完毕，假设音效长度约为1秒
+        yield return new WaitForSeconds(1f);
+
+        // 现在重新加载场景
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void StartGame(int difficulty)
     {
         isGameActive = true;
+        StartCoroutine(StartGameAfterDelay(difficulty));
+        
+    }
+    private IEnumerator StartGameAfterDelay(int difficulty)
+    {
+        // 等待音效播放完毕，假设音效长度约为1秒
+        yield return new WaitForSeconds(1f);
+
+        bgm.Play();
         spawnRate /= difficulty;
         titleScreen.SetActive(false);
         StartCoroutine(SpawnTarget());
         score = 0;
         ScoreUpdate(0);
+    }
+
+    public void ButtonSound()
+    {
+        gameSound.PlayOneShot(buttonSound);
     }
 }
