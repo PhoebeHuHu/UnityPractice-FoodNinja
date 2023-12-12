@@ -6,11 +6,11 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     private Rigidbody targetRB;
-    private float minSpeed = 6.0f;
+    private float minSpeed = 9.0f;
     private float maxSpeed = 13.0f;
     private float maxTorque = 10.0f;
     private float xRange = 4.0f;
-    private float ySpawnPos = -1.0f;
+    private float ySpawnPos = 0.0f;
     private GameManager gameManager;
     public int scoreValue;
     public ParticleSystem destroyParticle;
@@ -50,7 +50,7 @@ public class Target : MonoBehaviour
     {
         //when target lower than sensor, destroy it
         Destroy(gameObject);
-        if (!other.CompareTag("Bad"))
+        if (!gameObject.CompareTag("Bad"))
         {
             gameManager.GameOver();
         }
