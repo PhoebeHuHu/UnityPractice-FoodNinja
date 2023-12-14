@@ -11,14 +11,17 @@ public class GameManager : MonoBehaviour
     public List<GameObject> targets;
     private float spawnRate = 2.0f;
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI liveText;
     public TextMeshProUGUI gameOverText;
     public Button restartButton;
     public GameObject titleScreen;
     private int score;
+    public int live;
     public bool isGameActive;
     public AudioClip buttonSound;
     public AudioClip scoreSound;
     public AudioClip gameOverSound;
+    private bool hasGameOverSoundPlayed = false;
     public AudioClip badSound;
     private AudioSource bgm;
     public AudioSource gameSound;
@@ -56,12 +59,17 @@ public class GameManager : MonoBehaviour
         gameOverText.gameObject.SetActive(true);
         restartButton.gameObject.SetActive(true);
         bgm.Stop();
-        gameSound.PlayOneShot(gameOverSound,0.6f);
+        if (! hasGameOverSoundPlayed)
+        {
+            gameSound.PlayOneShot(gameOverSound, 0.6f);
+            hasGameOverSoundPlayed = true;
+        }
         isGameActive = false;
     }
     public void RestartGame()
     { 
         isGameActive = true;
+        hasGameOverSoundPlayed = false;
         StartCoroutine(RestartGameAfterDelay());
 
     }
@@ -84,17 +92,21 @@ public class GameManager : MonoBehaviour
     {
         // 等待音效播放完毕，假设音效长度约为1秒
         yield return new WaitForSeconds(1f);
-
-        bgm.Play();
         spawnRate /= difficulty;
         titleScreen.SetActive(false);
         StartCoroutine(SpawnTarget());
         score = 0;
         ScoreUpdate(0);
+        LiveUpdate();
     }
 
     public void ButtonSound()
     {
         gameSound.PlayOneShot(buttonSound);
+    }
+
+    public void LiveUpdate()
+    {
+        liveText.text = "Live: " + live;
     }
 }

@@ -60,10 +60,17 @@ public class Target : MonoBehaviour
     {
         //when target lower than sensor, destroy it
         Destroy(gameObject);
-        if (!gameObject.CompareTag("Bad"))
+        if (!gameObject.CompareTag("Bad") && gameManager.live > 0)
+        {
+            gameManager.live--;
+            gameManager.LiveUpdate();
+        }
+        if (gameManager.live == 0)
         {
             gameManager.GameOver();
         }
+        
+        
 
     }
     Vector3 RandomForce()
