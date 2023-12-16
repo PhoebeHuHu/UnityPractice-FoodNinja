@@ -15,9 +15,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI gameOverText;
     public Button restartButton;
     public GameObject titleScreen;
+    public GameObject pauseScreen;
     private int score;
     public int live;
     public bool isGameActive;
+    private bool isGamePaused = false;
     public AudioClip buttonSound;
     public AudioClip scoreSound;
     public AudioClip gameOverSound;
@@ -36,7 +38,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        SetGamePause();
     }
     IEnumerator SpawnTarget()
     {
@@ -108,5 +110,30 @@ public class GameManager : MonoBehaviour
     public void LiveUpdate()
     {
         liveText.text = "Live: " + live;
+    }
+
+    private void SetGamePause()
+    {
+       
+       
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                if (!isGamePaused)
+                {
+                    Time.timeScale = 0;
+                    pauseScreen.SetActive(true);
+                    isGamePaused = true;
+                    isGameActive = false;
+                }
+                else
+                {
+                    Time.timeScale = 1;
+                    pauseScreen.SetActive(false);
+                    isGamePaused = false;
+                    isGameActive = true;
+                }
+            }
+        
+        
     }
 }

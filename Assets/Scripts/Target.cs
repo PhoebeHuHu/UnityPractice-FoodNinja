@@ -34,13 +34,14 @@ public class Target : MonoBehaviour
     {
         
     }
-    private void OnMouseDown()
+    private void OnMouseEnter()
     {
-        if(gameManager.isGameActive)
+        //only distroy target when game is active and user press the left mouse button
+        if(gameManager.isGameActive && Input.GetMouseButton(0))
         {
-            //when click on the target, destroy it
+            //when the mouse meet the target, destroy it
             Destroy(gameObject);
-            //update score when click the target
+            //update score when meet the target
             gameManager.ScoreUpdate(scoreValue);
             //play partical when target is destroyed
             Instantiate(destroyParticle, transform.position, destroyParticle.transform.rotation);
